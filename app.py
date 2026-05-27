@@ -10,7 +10,8 @@ from PIL import Image
 st.set_page_config(
     page_title="FlorAD",
     page_icon="🌸",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 # =========================
@@ -68,6 +69,12 @@ st.markdown(
         background: rgba(255, 255, 255, 0);
     }
 
+    /* Ẩn sidebar */
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+
+    /* HERO */
     .hero {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         padding: 38px 35px;
@@ -93,6 +100,7 @@ st.markdown(
         color: white !important;
     }
 
+    /* CARD */
     .glass-card {
         background: rgba(255, 255, 255, 0.88);
         border: 1px solid rgba(255, 255, 255, 0.9);
@@ -182,6 +190,7 @@ st.markdown(
         margin-bottom: 5px;
     }
 
+    /* WELCOME CARD */
     .welcome-flower-card {
         background: white;
         border-radius: 22px;
@@ -203,6 +212,7 @@ st.markdown(
         margin-top: 8px;
     }
 
+    /* FEATURE CARD */
     .feature-card {
         background: #ffffff;
         border-radius: 18px;
@@ -228,6 +238,7 @@ st.markdown(
         line-height: 1.4;
     }
 
+    /* ALERT */
     .custom-alert-info {
         background-color: #D9F0FF;
         color: #111111;
@@ -261,6 +272,7 @@ st.markdown(
         border-left: 6px solid #2E7D32;
     }
 
+    /* NÚT */
     div.stButton > button {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         color: white !important;
@@ -279,7 +291,7 @@ st.markdown(
         box-shadow: 0px 12px 30px rgba(255, 79, 154, 0.38);
     }
 
-    /* Upload box */
+    /* FILE UPLOADER */
     div[data-testid="stFileUploader"] {
         background: #ffffff !important;
         padding: 24px !important;
@@ -304,44 +316,6 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    div[data-testid="stFileUploaderDropzone"] button,
-    div[data-testid="stFileUploaderDropzone"] button[kind],
-    div[data-testid="stFileUploaderDropzone"] button[data-testid],
-    div[data-testid="stFileUploaderDropzone"] button[data-testid="baseButton-secondary"],
-    [data-testid="stFileUploaderDropzone"] [data-testid="baseButton-secondary"] {
-        background: #1f2230 !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.35) !important;
-        border-radius: 12px !important;
-        font-weight: 900 !important;
-        box-shadow: none !important;
-        padding: 10px 22px !important;
-    }
-
-    div[data-testid="stFileUploaderDropzone"] button:hover,
-    div[data-testid="stFileUploaderDropzone"] button[kind]:hover,
-    div[data-testid="stFileUploaderDropzone"] button[data-testid]:hover,
-    div[data-testid="stFileUploaderDropzone"] button[data-testid="baseButton-secondary"]:hover,
-    [data-testid="stFileUploaderDropzone"] [data-testid="baseButton-secondary"]:hover {
-        background: #34384a !important;
-        color: #ffffff !important;
-        border: 1px solid rgba(255,255,255,0.55) !important;
-        transform: scale(1.02) !important;
-        box-shadow: none !important;
-    }
-
-    .stProgress > div > div > div > div {
-        background: linear-gradient(90deg, #FF4F9A, #FFB84D);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        color: #111111 !important;
-    }
-
-    p, span, label {
-        color: inherit;
-    }
-
     div[data-testid="stFileUploaderDropzone"] p,
     div[data-testid="stFileUploaderDropzone"] span,
     div[data-testid="stFileUploaderDropzone"] small,
@@ -357,6 +331,15 @@ st.markdown(
         color: #ffffff !important;
     }
 
+    div[data-testid="stFileUploaderDropzone"] button {
+        background: #1f2230 !important;
+        border: 1px solid rgba(255,255,255,0.35) !important;
+        border-radius: 12px !important;
+        font-weight: 900 !important;
+        box-shadow: none !important;
+        padding: 10px 22px !important;
+    }
+
     div[data-testid="stFileUploaderDropzone"] button svg,
     div[data-testid="stFileUploaderDropzone"] button svg *,
     div[data-testid="stFileUploaderDropzone"] button path {
@@ -365,30 +348,41 @@ st.markdown(
         stroke: #ffffff !important;
     }
 
-    /* =========================
-       FIX MÀU CHỮ RADIO + CAMERA
-    ========================= */
-    div[data-testid="stRadio"] p,
-    div[data-testid="stRadio"] span,
-    div[data-testid="stRadio"] label,
-    div[data-testid="stRadio"] div {
+    /* HIỆN TÊN FILE SAU KHI UPLOAD - CHỮ ĐEN */
+    div[data-testid="stFileUploader"] ul,
+    div[data-testid="stFileUploader"] li,
+    div[data-testid="stFileUploaderFile"] {
+        display: block !important;
+        background: #ffffff !important;
         color: #111111 !important;
     }
 
-    div[data-testid="stRadio"] [role="radiogroup"] label {
+    div[data-testid="stFileUploaderFile"] {
+        border-radius: 12px !important;
+        padding: 10px !important;
+        margin-top: 10px !important;
+        border: 1px solid rgba(0,0,0,0.12) !important;
+    }
+
+    div[data-testid="stFileUploaderFile"] *,
+    div[data-testid="stFileUploaderFileName"],
+    div[data-testid="stFileUploaderFileSize"] {
+        color: #111111 !important;
+        fill: #111111 !important;
+        stroke: #111111 !important;
+        background: transparent !important;
+    }
+
+    .stProgress > div > div > div > div {
+        background: linear-gradient(90deg, #FF4F9A, #FFB84D);
+    }
+
+    h1, h2, h3, h4, h5, h6 {
         color: #111111 !important;
     }
 
-    div[data-testid="stRadio"] [role="radiogroup"] label span {
-        color: #111111 !important;
-        font-weight: 700 !important;
-    }
-
-    div[data-testid="stCameraInput"] label,
-    div[data-testid="stCameraInput"] p,
-    div[data-testid="stCameraInput"] span {
-        color: #111111 !important;
-        font-weight: 700 !important;
+    p, span, label {
+        color: inherit;
     }
     </style>
     """,
@@ -449,8 +443,8 @@ if st.session_state.page == "welcome":
         st.markdown(
             """
             <div class="feature-card">
-                <div class="feature-icon">📸</div>
-                <div class="feature-text">Chụp ảnh hoa trực tiếp bằng camera</div>
+                <div class="feature-icon">🤖</div>
+                <div class="feature-text">AI dự đoán loại hoa bằng mô hình CNN</div>
             </div>
             """,
             unsafe_allow_html=True
@@ -523,69 +517,36 @@ else:
         unsafe_allow_html=True
     )
 
-    img = None
-
     left_col, right_col = st.columns([1.05, 0.95], gap="large")
 
     with left_col:
         st.markdown(
             """
             <div class="glass-card">
-                <div class="section-title">📤 Đưa ảnh hoa vào hệ thống</div>
+                <div class="section-title">📤 Tải ảnh hoa</div>
                 <div class="small-text">
-                    Bạn có thể tải ảnh hoa từ máy tính hoặc chụp ảnh trực tiếp bằng camera.
-                    Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
+                    Bạn chọn một ảnh hoa từ máy tính. Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        st.markdown(
-            """
-            <div style="color:#111111; font-size:17px; font-weight:800; margin-bottom:8px;">
-                Chọn cách đưa ảnh vào hệ thống:
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        input_method = st.radio(
-            "Chọn cách đưa ảnh vào hệ thống:",
-            ["📤 Tải ảnh từ máy", "📸 Chụp ảnh trực tiếp"],
-            horizontal=True,
+        uploaded_file = st.file_uploader(
+            "Chọn ảnh hoa",
+            type=["jpg", "jpeg", "png"],
             label_visibility="collapsed"
         )
 
-        if input_method == "📤 Tải ảnh từ máy":
-            uploaded_file = st.file_uploader(
-                "Chọn ảnh hoa",
-                type=["jpg", "jpeg", "png"],
-                label_visibility="collapsed"
+        if uploaded_file is not None:
+            img = Image.open(uploaded_file).convert("RGB")
+
+            st.markdown("### 🖼️ Ảnh đã tải lên")
+            st.image(
+                img,
+                caption="Ảnh đầu vào",
+                use_container_width=True
             )
-
-            if uploaded_file is not None:
-                img = Image.open(uploaded_file).convert("RGB")
-
-                st.markdown("### 🖼️ Ảnh đã tải lên")
-                st.image(
-                    img,
-                    caption="Ảnh đầu vào",
-                    use_container_width=True
-                )
-
-        else:
-            camera_file = st.camera_input("📸 Chụp ảnh hoa trực tiếp")
-
-            if camera_file is not None:
-                img = Image.open(camera_file).convert("RGB")
-
-                st.markdown("### 📸 Ảnh vừa chụp")
-                st.image(
-                    img,
-                    caption="Ảnh chụp từ camera",
-                    use_container_width=True
-                )
 
     with right_col:
         st.markdown(
@@ -593,14 +554,14 @@ else:
             <div class="glass-card">
                 <div class="section-title">🤖 Kết quả AI</div>
                 <div class="small-text">
-                    Sau khi có ảnh, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
+                    Sau khi tải ảnh lên, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        if img is not None:
+        if uploaded_file is not None:
             img_resized = img.resize((img_width, img_height))
             img_array = image.img_to_array(img_resized)
             img_array = img_array / 255.0
@@ -676,8 +637,8 @@ else:
                 """
                 <div class="result-card">
                     <div class="result-icon">🌷</div>
-                    <div class="result-label">Chưa có ảnh nào được đưa vào</div>
-                    <div class="result-name" style="font-size:28px;">Hãy tải ảnh hoặc chụp ảnh</div>
+                    <div class="result-label">Chưa có ảnh nào được tải lên</div>
+                    <div class="result-name" style="font-size:28px;">Hãy chọn một ảnh hoa</div>
                     <div class="confidence-badge">Đang chờ dự đoán...</div>
                 </div>
                 """,
