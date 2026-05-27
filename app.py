@@ -166,16 +166,6 @@ st.markdown(
         box-shadow: 0px 5px 14px rgba(0,0,0,0.08);
     }
 
-    .guide-box {
-        background: #ffffff;
-        padding: 18px;
-        border-radius: 20px;
-        border-left: 6px solid #FF4F9A;
-        box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
-        color: #222222;
-        line-height: 1.7;
-    }
-
     .footer {
         text-align: center;
         color: #333333;
@@ -213,9 +203,6 @@ st.markdown(
         margin-top: 8px;
     }
 
-    /* =========================
-       FEATURE CARD - TRANG ĐẦU
-    ========================= */
     .feature-card {
         background: #ffffff;
         border-radius: 18px;
@@ -292,6 +279,7 @@ st.markdown(
         box-shadow: 0px 12px 30px rgba(255, 79, 154, 0.38);
     }
 
+    /* Upload box */
     div[data-testid="stFileUploader"] {
         background: #ffffff !important;
         padding: 24px !important;
@@ -435,8 +423,8 @@ if st.session_state.page == "welcome":
         st.markdown(
             """
             <div class="feature-card">
-                <div class="feature-icon">🤖</div>
-                <div class="feature-text">AI dự đoán loại hoa bằng mô hình CNN</div>
+                <div class="feature-icon">📸</div>
+                <div class="feature-text">Chụp ảnh hoa trực tiếp bằng camera</div>
             </div>
             """,
             unsafe_allow_html=True
@@ -476,6 +464,9 @@ if st.session_state.page == "welcome":
 # =========================
 else:
 
+    # =========================
+    # NÚT QUAY LẠI TRANG ĐẦU
+    # =========================
     top_col1, top_col2 = st.columns([1, 5])
 
     with top_col1:
@@ -483,36 +474,9 @@ else:
             st.session_state.page = "welcome"
             st.rerun()
 
-    with st.sidebar:
-        st.markdown("## 🌸 FlorAD")
-
-        if st.button("🏠 Trang chào mừng", use_container_width=True):
-            st.session_state.page = "welcome"
-            st.rerun()
-
-        st.markdown(
-            """
-            <div class='guide-box'>
-                <b>Hướng dẫn sử dụng:</b><br>
-                1. Tải ảnh hoa lên<br>
-                2. Hệ thống xử lý ảnh<br>
-                3. AI dự đoán loại hoa<br>
-                4. Xem độ tin cậy của kết quả
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.markdown("### 🌷 Nhận diện được:")
-        st.markdown("🌼 Hoa cúc")
-        st.markdown("🌾 Bồ công anh")
-        st.markdown("🌹 Hoa hồng")
-        st.markdown("🌻 Hoa hướng dương")
-        st.markdown("🌷 Hoa tulip")
-
-        st.markdown("---")
-        st.info("Ảnh nên rõ nét, có hoa ở trung tâm để dự đoán chính xác hơn.")
-
+    # =========================
+    # HERO
+    # =========================
     st.markdown(
         """
         <div class="hero">
@@ -526,6 +490,9 @@ else:
         unsafe_allow_html=True
     )
 
+    # =========================
+    # DANH SÁCH HOA
+    # =========================
     st.markdown(
         """
         <div style="text-align:center; margin-bottom: 20px;">
@@ -539,36 +506,63 @@ else:
         unsafe_allow_html=True
     )
 
+    # Biến ảnh dùng chung cho upload và camera
+    img = None
+
+    # =========================
+    # LAYOUT CHÍNH
+    # =========================
     left_col, right_col = st.columns([1.05, 0.95], gap="large")
 
     with left_col:
         st.markdown(
             """
             <div class="glass-card">
-                <div class="section-title">📤 Tải ảnh hoa</div>
+                <div class="section-title">📤 Đưa ảnh hoa vào hệ thống</div>
                 <div class="small-text">
-                    Bạn chọn một ảnh hoa từ máy tính. Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
+                    Bạn có thể tải ảnh hoa từ máy tính hoặc chụp ảnh trực tiếp bằng camera.
+                    Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        uploaded_file = st.file_uploader(
-            "Chọn ảnh hoa",
-            type=["jpg", "jpeg", "png"],
-            label_visibility="collapsed"
+        input_method = st.radio(
+            "Chọn cách đưa ảnh vào hệ thống:",
+            ["📤 Tải ảnh từ máy", "📸 Chụp ảnh trực tiếp"],
+            horizontal=True
         )
 
-        if uploaded_file is not None:
-            img = Image.open(uploaded_file).convert("RGB")
-
-            st.markdown("### 🖼️ Ảnh đã tải lên")
-            st.image(
-                img,
-                caption="Ảnh đầu vào",
-                use_container_width=True
+        if input_method == "📤 Tải ảnh từ máy":
+            uploaded_file = st.file_uploader(
+                "Chọn ảnh hoa",
+                type=["jpg", "jpeg", "png"],
+                label_visibility="collapsed"
             )
+
+            if uploaded_file is not None:
+                img = Image.open(uploaded_file).convert("RGB")
+
+                st.markdown("### 🖼️ Ảnh đã tải lên")
+                st.image(
+                    img,
+                    caption="Ảnh đầu vào",
+                    use_container_width=True
+                )
+
+        else:
+            camera_file = st.camera_input("📸 Chụp ảnh hoa trực tiếp")
+
+            if camera_file is not None:
+                img = Image.open(camera_file).convert("RGB")
+
+                st.markdown("### 📸 Ảnh vừa chụp")
+                st.image(
+                    img,
+                    caption="Ảnh chụp từ camera",
+                    use_container_width=True
+                )
 
     with right_col:
         st.markdown(
@@ -576,19 +570,25 @@ else:
             <div class="glass-card">
                 <div class="section-title">🤖 Kết quả AI</div>
                 <div class="small-text">
-                    Sau khi tải ảnh lên, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
+                    Sau khi có ảnh, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        if uploaded_file is not None:
+        if img is not None:
+            # =========================
+            # TIỀN XỬ LÝ ẢNH
+            # =========================
             img_resized = img.resize((img_width, img_height))
             img_array = image.img_to_array(img_resized)
             img_array = img_array / 255.0
             img_array = np.expand_dims(img_array, axis=0)
 
+            # =========================
+            # DỰ ĐOÁN
+            # =========================
             predictions = model.predict(img_array)
 
             predicted_index = np.argmax(predictions[0])
@@ -659,14 +659,17 @@ else:
                 """
                 <div class="result-card">
                     <div class="result-icon">🌷</div>
-                    <div class="result-label">Chưa có ảnh nào được tải lên</div>
-                    <div class="result-name" style="font-size:28px;">Hãy chọn một ảnh hoa</div>
+                    <div class="result-label">Chưa có ảnh nào được đưa vào</div>
+                    <div class="result-name" style="font-size:28px;">Hãy tải ảnh hoặc chụp ảnh</div>
                     <div class="confidence-badge">Đang chờ dự đoán...</div>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
 
+    # =========================
+    # THÔNG TIN THÊM
+    # =========================
     st.markdown("---")
 
     info_col1, info_col2, info_col3 = st.columns(3)
