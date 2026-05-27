@@ -364,6 +364,32 @@ st.markdown(
         fill: #ffffff !important;
         stroke: #ffffff !important;
     }
+
+    /* =========================
+       FIX MÀU CHỮ RADIO + CAMERA
+    ========================= */
+    div[data-testid="stRadio"] p,
+    div[data-testid="stRadio"] span,
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] div {
+        color: #111111 !important;
+    }
+
+    div[data-testid="stRadio"] [role="radiogroup"] label {
+        color: #111111 !important;
+    }
+
+    div[data-testid="stRadio"] [role="radiogroup"] label span {
+        color: #111111 !important;
+        font-weight: 700 !important;
+    }
+
+    div[data-testid="stCameraInput"] label,
+    div[data-testid="stCameraInput"] p,
+    div[data-testid="stCameraInput"] span {
+        color: #111111 !important;
+        font-weight: 700 !important;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -464,9 +490,6 @@ if st.session_state.page == "welcome":
 # =========================
 else:
 
-    # =========================
-    # NÚT QUAY LẠI TRANG ĐẦU
-    # =========================
     top_col1, top_col2 = st.columns([1, 5])
 
     with top_col1:
@@ -474,9 +497,6 @@ else:
             st.session_state.page = "welcome"
             st.rerun()
 
-    # =========================
-    # HERO
-    # =========================
     st.markdown(
         """
         <div class="hero">
@@ -490,9 +510,6 @@ else:
         unsafe_allow_html=True
     )
 
-    # =========================
-    # DANH SÁCH HOA
-    # =========================
     st.markdown(
         """
         <div style="text-align:center; margin-bottom: 20px;">
@@ -506,12 +523,8 @@ else:
         unsafe_allow_html=True
     )
 
-    # Biến ảnh dùng chung cho upload và camera
     img = None
 
-    # =========================
-    # LAYOUT CHÍNH
-    # =========================
     left_col, right_col = st.columns([1.05, 0.95], gap="large")
 
     with left_col:
@@ -528,10 +541,20 @@ else:
             unsafe_allow_html=True
         )
 
+        st.markdown(
+            """
+            <div style="color:#111111; font-size:17px; font-weight:800; margin-bottom:8px;">
+                Chọn cách đưa ảnh vào hệ thống:
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         input_method = st.radio(
             "Chọn cách đưa ảnh vào hệ thống:",
             ["📤 Tải ảnh từ máy", "📸 Chụp ảnh trực tiếp"],
-            horizontal=True
+            horizontal=True,
+            label_visibility="collapsed"
         )
 
         if input_method == "📤 Tải ảnh từ máy":
@@ -578,17 +601,11 @@ else:
         )
 
         if img is not None:
-            # =========================
-            # TIỀN XỬ LÝ ẢNH
-            # =========================
             img_resized = img.resize((img_width, img_height))
             img_array = image.img_to_array(img_resized)
             img_array = img_array / 255.0
             img_array = np.expand_dims(img_array, axis=0)
 
-            # =========================
-            # DỰ ĐOÁN
-            # =========================
             predictions = model.predict(img_array)
 
             predicted_index = np.argmax(predictions[0])
@@ -667,9 +684,6 @@ else:
                 unsafe_allow_html=True
             )
 
-    # =========================
-    # THÔNG TIN THÊM
-    # =========================
     st.markdown("---")
 
     info_col1, info_col2, info_col3 = st.columns(3)
