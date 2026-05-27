@@ -68,9 +68,6 @@ st.markdown(
         background: rgba(255, 255, 255, 0);
     }
 
-    /* =========================
-       HERO
-    ========================= */
     .hero {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         padding: 38px 35px;
@@ -96,9 +93,6 @@ st.markdown(
         color: white !important;
     }
 
-    /* =========================
-       CARD
-    ========================= */
     .glass-card {
         background: rgba(255, 255, 255, 0.88);
         border: 1px solid rgba(255, 255, 255, 0.9);
@@ -198,9 +192,6 @@ st.markdown(
         margin-bottom: 5px;
     }
 
-    /* =========================
-       WELCOME CARD
-    ========================= */
     .welcome-flower-card {
         background: white;
         border-radius: 22px;
@@ -223,8 +214,33 @@ st.markdown(
     }
 
     /* =========================
-       ALERT
+       FEATURE CARD - TRANG ĐẦU
     ========================= */
+    .feature-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 20px;
+        min-height: 85px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        box-shadow: 0px 8px 20px rgba(0,0,0,0.08);
+        border: 1px solid rgba(255,143,189,0.4);
+    }
+
+    .feature-icon {
+        font-size: 30px;
+        min-width: 38px;
+        text-align: center;
+    }
+
+    .feature-text {
+        color: #111111 !important;
+        font-size: 17px;
+        font-weight: 800;
+        line-height: 1.4;
+    }
+
     .custom-alert-info {
         background-color: #D9F0FF;
         color: #111111;
@@ -258,9 +274,6 @@ st.markdown(
         border-left: 6px solid #2E7D32;
     }
 
-    /* =========================
-       NÚT CHUNG
-    ========================= */
     div.stButton > button {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         color: white !important;
@@ -279,9 +292,6 @@ st.markdown(
         box-shadow: 0px 12px 30px rgba(255, 79, 154, 0.38);
     }
 
-    /* =========================
-       FILE UPLOADER
-    ========================= */
     div[data-testid="stFileUploader"] {
         background: #ffffff !important;
         padding: 24px !important;
@@ -342,13 +352,6 @@ st.markdown(
 
     p, span, label {
         color: inherit;
-    }
-
-    /* =========================
-       FIX CUỐI CÙNG CHO UPLOAD
-    ========================= */
-    div[data-testid="stFileUploaderDropzone"] {
-        background: #2b2d3a !important;
     }
 
     div[data-testid="stFileUploaderDropzone"] p,
@@ -418,13 +421,37 @@ if st.session_state.page == "welcome":
     f1, f2, f3 = st.columns(3)
 
     with f1:
-        st.info("📤 Upload ảnh hoa trực tiếp từ máy tính")
+        st.markdown(
+            """
+            <div class="feature-card">
+                <div class="feature-icon">📤</div>
+                <div class="feature-text">Upload ảnh hoa trực tiếp từ máy tính</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with f2:
-        st.info("🤖 AI dự đoán loại hoa bằng mô hình CNN")
+        st.markdown(
+            """
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-text">AI dự đoán loại hoa bằng mô hình CNN</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     with f3:
-        st.info("📊 Hiển thị độ tin cậy và xác suất từng loại hoa")
+        st.markdown(
+            """
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-text">Hiển thị độ tin cậy và xác suất từng loại hoa</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
     st.markdown("---")
 
@@ -449,9 +476,6 @@ if st.session_state.page == "welcome":
 # =========================
 else:
 
-    # =========================
-    # NÚT QUAY LẠI TRANG ĐẦU
-    # =========================
     top_col1, top_col2 = st.columns([1, 5])
 
     with top_col1:
@@ -459,9 +483,6 @@ else:
             st.session_state.page = "welcome"
             st.rerun()
 
-    # =========================
-    # SIDEBAR
-    # =========================
     with st.sidebar:
         st.markdown("## 🌸 FlorAD")
 
@@ -492,9 +513,6 @@ else:
         st.markdown("---")
         st.info("Ảnh nên rõ nét, có hoa ở trung tâm để dự đoán chính xác hơn.")
 
-    # =========================
-    # HERO
-    # =========================
     st.markdown(
         """
         <div class="hero">
@@ -508,9 +526,6 @@ else:
         unsafe_allow_html=True
     )
 
-    # =========================
-    # DANH SÁCH HOA
-    # =========================
     st.markdown(
         """
         <div style="text-align:center; margin-bottom: 20px;">
@@ -524,9 +539,6 @@ else:
         unsafe_allow_html=True
     )
 
-    # =========================
-    # LAYOUT CHÍNH
-    # =========================
     left_col, right_col = st.columns([1.05, 0.95], gap="large")
 
     with left_col:
@@ -572,17 +584,11 @@ else:
         )
 
         if uploaded_file is not None:
-            # =========================
-            # TIỀN XỬ LÝ ẢNH
-            # =========================
             img_resized = img.resize((img_width, img_height))
             img_array = image.img_to_array(img_resized)
             img_array = img_array / 255.0
             img_array = np.expand_dims(img_array, axis=0)
 
-            # =========================
-            # DỰ ĐOÁN
-            # =========================
             predictions = model.predict(img_array)
 
             predicted_index = np.argmax(predictions[0])
@@ -590,9 +596,6 @@ else:
             predicted_class = class_names[predicted_index]
             icon = flower_icons[predicted_class]
 
-            # =========================
-            # CARD KẾT QUẢ
-            # =========================
             st.markdown(
                 f"""
                 <div class="result-card">
@@ -623,9 +626,6 @@ else:
 
                 st.progress(float(prob))
 
-            # =========================
-            # THÔNG BÁO THEO ĐỘ TIN CẬY
-            # =========================
             if confidence < 60:
                 st.markdown(
                     """
@@ -667,9 +667,6 @@ else:
                 unsafe_allow_html=True
             )
 
-    # =========================
-    # THÔNG TIN THÊM
-    # =========================
     st.markdown("---")
 
     info_col1, info_col2, info_col3 = st.columns(3)
@@ -713,9 +710,6 @@ else:
             unsafe_allow_html=True
         )
 
-    # =========================
-    # FOOTER
-    # =========================
     st.markdown(
         """
         <div class="footer">
