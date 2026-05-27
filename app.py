@@ -56,6 +56,18 @@ flower_icons = {
 }
 
 # =========================
+# HÀM ĐỊNH DẠNG DUNG LƯỢNG FILE
+# =========================
+def format_file_size(size_bytes):
+    if size_bytes < 1024:
+        return f"{size_bytes} B"
+    elif size_bytes < 1024 * 1024:
+        return f"{size_bytes / 1024:.1f}KB"
+    else:
+        return f"{size_bytes / (1024 * 1024):.1f}MB"
+
+
+# =========================
 # CSS GIAO DIỆN
 # =========================
 st.markdown(
@@ -348,29 +360,69 @@ st.markdown(
         stroke: #ffffff !important;
     }
 
-    /* HIỆN TÊN FILE SAU KHI UPLOAD - CHỮ ĐEN */
+    /* Ẩn dòng file mặc định của Streamlit */
     div[data-testid="stFileUploader"] ul,
     div[data-testid="stFileUploader"] li,
     div[data-testid="stFileUploaderFile"] {
-        display: block !important;
-        background: #ffffff !important;
-        color: #111111 !important;
+        display: none !important;
     }
 
-    div[data-testid="stFileUploaderFile"] {
-        border-radius: 12px !important;
-        padding: 10px !important;
-        margin-top: 10px !important;
-        border: 1px solid rgba(0,0,0,0.12) !important;
+    /* File card tự thiết kế */
+    .custom-file-card {
+        background: #1f2230;
+        color: white;
+        border-radius: 14px;
+        padding: 12px 16px;
+        margin-top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0px 8px 18px rgba(0,0,0,0.16);
+        max-width: 100%;
     }
 
-    div[data-testid="stFileUploaderFile"] *,
-    div[data-testid="stFileUploaderFileName"],
-    div[data-testid="stFileUploaderFileSize"] {
-        color: #111111 !important;
-        fill: #111111 !important;
-        stroke: #111111 !important;
-        background: transparent !important;
+    .custom-file-icon {
+        background: white;
+        color: #1f2230;
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .custom-file-info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+        min-width: 0;
+    }
+
+    .custom-file-name {
+        color: #ffffff !important;
+        font-size: 16px;
+        font-weight: 800;
+        max-width: 260px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .custom-file-size {
+        color: #9EC8FF !important;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 4px;
+    }
+
+    .custom-file-close {
+        color: #d7d7e8 !important;
+        font-size: 18px;
+        font-weight: 900;
+        margin-left: 4px;
     }
 
     .stProgress > div > div > div > div {
@@ -539,6 +591,22 @@ else:
         )
 
         if uploaded_file is not None:
+            file_size = format_file_size(uploaded_file.size)
+
+            st.markdown(
+                f"""
+                <div class="custom-file-card">
+                    <div class="custom-file-icon">🖼️</div>
+                    <div class="custom-file-info">
+                        <div class="custom-file-name">{uploaded_file.name}</div>
+                        <div class="custom-file-size">{file_size}</div>
+                    </div>
+                    <div class="custom-file-close">×</div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
             img = Image.open(uploaded_file).convert("RGB")
 
             st.markdown("### 🖼️ Ảnh đã tải lên")
