@@ -426,6 +426,35 @@ st.markdown(
     p, span, label {
         color: inherit;
     }
+
+    /* =========================
+       FIX RADIO CHỌN CÁCH NHẬP ẢNH
+    ========================= */
+    div[role="radiogroup"] label,
+    div[role="radiogroup"] label *,
+    div[role="radiogroup"] p,
+    div[role="radiogroup"] span {
+        color: #111111 !important;
+        font-weight: 800 !important;
+    }
+
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label *,
+    div[data-testid="stRadio"] p,
+    div[data-testid="stRadio"] span {
+        color: #111111 !important;
+    }
+
+    div[role="radiogroup"] div[data-testid="stMarkdownContainer"] p {
+        color: #111111 !important;
+    }
+
+    .radio-title {
+        color: #111111 !important;
+        font-size: 17px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -578,10 +607,20 @@ else:
             unsafe_allow_html=True
         )
 
+        st.markdown(
+            """
+            <div class="radio-title">
+                Chọn cách nhập ảnh:
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
         input_mode = st.radio(
             "Chọn cách nhập ảnh:",
             ["📤 Tải ảnh lên", "📷 Chụp ảnh trực tiếp"],
-            horizontal=True
+            horizontal=True,
+            label_visibility="collapsed"
         )
 
         if input_mode == "📤 Tải ảnh lên":
