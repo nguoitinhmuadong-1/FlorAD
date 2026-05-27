@@ -81,12 +81,10 @@ st.markdown(
         background: rgba(255, 255, 255, 0);
     }
 
-    /* Ẩn sidebar */
     [data-testid="stSidebar"] {
         display: none;
     }
 
-    /* HERO */
     .hero {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         padding: 38px 35px;
@@ -112,7 +110,6 @@ st.markdown(
         color: white !important;
     }
 
-    /* CARD */
     .glass-card {
         background: rgba(255, 255, 255, 0.88);
         border: 1px solid rgba(255, 255, 255, 0.9);
@@ -202,7 +199,6 @@ st.markdown(
         margin-bottom: 5px;
     }
 
-    /* WELCOME CARD */
     .welcome-flower-card {
         background: white;
         border-radius: 22px;
@@ -224,7 +220,6 @@ st.markdown(
         margin-top: 8px;
     }
 
-    /* FEATURE CARD */
     .feature-card {
         background: #ffffff;
         border-radius: 18px;
@@ -250,7 +245,6 @@ st.markdown(
         line-height: 1.4;
     }
 
-    /* ALERT */
     .custom-alert-info {
         background-color: #D9F0FF;
         color: #111111;
@@ -284,7 +278,6 @@ st.markdown(
         border-left: 6px solid #2E7D32;
     }
 
-    /* NÚT */
     div.stButton > button {
         background: linear-gradient(135deg, #FF4F9A, #FFB84D);
         color: white !important;
@@ -303,7 +296,6 @@ st.markdown(
         box-shadow: 0px 12px 30px rgba(255, 79, 154, 0.38);
     }
 
-    /* FILE UPLOADER */
     div[data-testid="stFileUploader"] {
         background: #ffffff !important;
         padding: 24px !important;
@@ -360,14 +352,12 @@ st.markdown(
         stroke: #ffffff !important;
     }
 
-    /* Ẩn dòng file mặc định của Streamlit */
     div[data-testid="stFileUploader"] ul,
     div[data-testid="stFileUploader"] li,
     div[data-testid="stFileUploaderFile"] {
         display: none !important;
     }
 
-    /* File card tự thiết kế */
     .custom-file-card {
         background: #1f2230;
         color: white;
@@ -506,8 +496,8 @@ if st.session_state.page == "welcome":
         st.markdown(
             """
             <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <div class="feature-text">Hiển thị độ tin cậy và xác suất từng loại hoa</div>
+                <div class="feature-icon">📷</div>
+                <div class="feature-text">Hỗ trợ upload ảnh và chụp trực tiếp bằng camera</div>
             </div>
             """,
             unsafe_allow_html=True
@@ -569,50 +559,84 @@ else:
         unsafe_allow_html=True
     )
 
+    # Biến ảnh dùng chung cho cả upload và camera
+    img = None
+
     left_col, right_col = st.columns([1.05, 0.95], gap="large")
 
     with left_col:
         st.markdown(
             """
             <div class="glass-card">
-                <div class="section-title">📤 Tải ảnh hoa</div>
+                <div class="section-title">📤 Tải hoặc chụp ảnh hoa</div>
                 <div class="small-text">
-                    Bạn chọn một ảnh hoa từ máy tính. Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
+                    Bạn có thể tải ảnh từ máy tính hoặc chụp ảnh trực tiếp bằng camera.
+                    Hệ thống sẽ tự động resize ảnh về kích thước 224 x 224 giống lúc train model.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        uploaded_file = st.file_uploader(
-            "Chọn ảnh hoa",
-            type=["jpg", "jpeg", "png"],
-            label_visibility="collapsed"
+        input_mode = st.radio(
+            "Chọn cách nhập ảnh:",
+            ["📤 Tải ảnh lên", "📷 Chụp ảnh trực tiếp"],
+            horizontal=True
         )
 
-        if uploaded_file is not None:
-            file_size = format_file_size(uploaded_file.size)
-
-            st.markdown(
-                f"""
-                <div class="custom-file-card">
-                    <div class="custom-file-icon">🖼️</div>
-                    <div class="custom-file-info">
-                        <div class="custom-file-name">{uploaded_file.name}</div>
-                        <div class="custom-file-size">{file_size}</div>
-                    </div>
-                    <div class="custom-file-close">×</div>
-                </div>
-                """,
-                unsafe_allow_html=True
+        if input_mode == "📤 Tải ảnh lên":
+            uploaded_file = st.file_uploader(
+                "Chọn ảnh hoa",
+                type=["jpg", "jpeg", "png"],
+                label_visibility="collapsed"
             )
 
-            img = Image.open(uploaded_file).convert("RGB")
+            if uploaded_file is not None:
+                file_size = format_file_size(uploaded_file.size)
 
-            st.markdown("### 🖼️ Ảnh đã tải lên")
+                st.markdown(
+                    f"""
+                    <div class="custom-file-card">
+                        <div class="custom-file-icon">🖼️</div>
+                        <div class="custom-file-info">
+                            <div class="custom-file-name">{uploaded_file.name}</div>
+                            <div class="custom-file-size">{file_size}</div>
+                        </div>
+                        <div class="custom-file-close">×</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                img = Image.open(uploaded_file).convert("RGB")
+
+        else:
+            camera_file = st.camera_input("📷 Chụp ảnh hoa")
+
+            if camera_file is not None:
+                file_size = format_file_size(camera_file.size)
+
+                st.markdown(
+                    f"""
+                    <div class="custom-file-card">
+                        <div class="custom-file-icon">📷</div>
+                        <div class="custom-file-info">
+                            <div class="custom-file-name">Ảnh chụp từ camera</div>
+                            <div class="custom-file-size">{file_size}</div>
+                        </div>
+                        <div class="custom-file-close">×</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+                img = Image.open(camera_file).convert("RGB")
+
+        if img is not None:
+            st.markdown("### 🖼️ Ảnh đầu vào")
             st.image(
                 img,
-                caption="Ảnh đầu vào",
+                caption="Ảnh dùng để nhận diện",
                 use_container_width=True
             )
 
@@ -622,14 +646,14 @@ else:
             <div class="glass-card">
                 <div class="section-title">🤖 Kết quả AI</div>
                 <div class="small-text">
-                    Sau khi tải ảnh lên, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
+                    Sau khi có ảnh đầu vào, model CNN sẽ phân tích và đưa ra loại hoa có xác suất cao nhất.
                 </div>
             </div>
             """,
             unsafe_allow_html=True
         )
 
-        if uploaded_file is not None:
+        if img is not None:
             img_resized = img.resize((img_width, img_height))
             img_array = image.img_to_array(img_resized)
             img_array = img_array / 255.0
@@ -705,8 +729,8 @@ else:
                 """
                 <div class="result-card">
                     <div class="result-icon">🌷</div>
-                    <div class="result-label">Chưa có ảnh nào được tải lên</div>
-                    <div class="result-name" style="font-size:28px;">Hãy chọn một ảnh hoa</div>
+                    <div class="result-label">Chưa có ảnh đầu vào</div>
+                    <div class="result-name" style="font-size:28px;">Hãy tải ảnh hoặc chụp ảnh</div>
                     <div class="confidence-badge">Đang chờ dự đoán...</div>
                 </div>
                 """,
